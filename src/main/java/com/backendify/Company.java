@@ -1,23 +1,8 @@
 package com.backendify;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
-import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
 public class Company {
-
-    @Id
-    @SequenceGenerator(
-            name = "Company_id_sequence",
-            sequenceName = "company_id_sequence"
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "company_id_sequence"
-    )
-
     String id;
     String name;
     boolean active;

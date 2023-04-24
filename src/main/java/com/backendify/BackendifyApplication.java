@@ -1,7 +1,10 @@
 package com.backendify;
 
+
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -10,11 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +22,11 @@ import java.util.Map;
 public class BackendifyApplication {
 
 	private static Map<String, String> params = new HashMap<>();
+	@Value("${external-service.version}")
+	private String backendServiceUrl;
+
+	@Autowired
+	ServiceMapper serviceMapper;
 
 	public static void main(String[] args) {
 		saveParameters(args);
@@ -52,14 +55,17 @@ public class BackendifyApplication {
 	}
 
 	@GetMapping("/company")
+	@ResponseStatus(HttpStatus.OK)
 	public Company getCompanies(@RequestParam("id") String id, @RequestParam("country_iso") String countryIso) throws Exception{
 
 		String baseUrl = params.get(countryIso);
 
-		String externalServiceUrl = baseUrl + "/v1" + "/companies/" + id;
+		String externalServiceUrl = baseUrl + "/" + backendServiceUrl + "/companies/" + id;
+
+		Company company = serviceMapper.getCompanies(externalServiceUrl);
 
 
-		HttpClient client = HttpClient.newHttpClient();
+		/*HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create(externalServiceUrl))
 				.build();
@@ -69,7 +75,7 @@ public class BackendifyApplication {
 
 
 		Gson gson = new Gson();
-		Company company = gson.fromJson(response.body(), Company.class);
+		Company company = gson.fromJson(response.body(), Company.class);*/
 
 
 		return company;

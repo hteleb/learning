@@ -62,7 +62,7 @@ public class BackendifyApplication {
 
 		String externalServiceUrl = baseUrl + "/" + backendServiceUrl + "/companies/" + id;
 
-		Company company = serviceMapper.getCompanies(externalServiceUrl);
+		Company company = serviceMapper.getCompanies(externalServiceUrl, id);
 
 
 		/*HttpClient client = HttpClient.newHttpClient();

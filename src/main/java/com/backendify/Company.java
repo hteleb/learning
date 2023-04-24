@@ -1,22 +1,20 @@
 package com.backendify;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.util.Objects;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Company {
     String id;
     String name;
     boolean active;
     String active_until;
 
-
-    public Company() {
-    }
-    public Company(String id, String name, boolean active, String active_until) {
-        this.id = id;
-        this.name = name;
-        this.active = active;
-        this.active_until = active_until;
-    }
 
     public void setId(String id) {
         this.id = id;

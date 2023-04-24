@@ -1,6 +1,6 @@
 FROM alpine:3
 
-FROM openjdk:11-jdk-slim
+FROM openjdk:17-jdk-slim
 
 EXPOSE 9000
 

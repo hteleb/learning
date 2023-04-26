@@ -1,6 +1,7 @@
 package com.backendify;
 
 import com.backendify.entity.BackendOneResponse;
+import com.backendify.entity.BackendTwoResponse;
 import com.google.gson.Gson;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ServiceMapper {
    }
 
 
-   public ResponseEntity<Company> getCompanies(String backendUrl, String id) throws Exception {
+   public ResponseEntity<Company> getCompanies(String backendUrl, String id, String backendVersion) throws Exception {
 
 
        Company company = null;
@@ -46,19 +47,38 @@ public class ServiceMapper {
 
       if(response.statusCode() == 200) {
           Gson gson = new Gson();
-          BackendOneResponse entity = gson.fromJson(response.body(), BackendOneResponse.class);
 
-          //calculate whether it is active or not
-          ZonedDateTime closedOnDateTime = ZonedDateTime.parse(entity.getClosed_on());
-          ZonedDateTime todaysDateTime = ZonedDateTime.parse(Instant.now().toString());
-          boolean isActive = todaysDateTime.isBefore(closedOnDateTime)? true: false;
+          if(backendVersion.equalsIgnoreCase("v1")) {
+              BackendOneResponse entity = gson.fromJson(response.body(), BackendOneResponse.class);
 
-          company = company.builder()
-                  .id(id)
-                  .name(entity.getCn())
-                  .active(isActive)
-                  .active_until(entity.getClosed_on())
-                  .build();
+              //calculate whether it is active or not
+              ZonedDateTime closedOnDateTime = ZonedDateTime.parse(entity.getClosed_on());
+              ZonedDateTime todaysDateTime = ZonedDateTime.parse(Instant.now().toString());
+              boolean isActive = closedOnDateTime.isAfter(todaysDateTime)? true: false;
+
+              company = company.builder()
+                      .id(id)
+                      .name(entity.getCn())
+                      .active(isActive)
+                      .active_until(entity.getClosed_on())
+                      .build();
+          }
+          else {
+              BackendTwoResponse entity = gson.fromJson(response.body(), BackendTwoResponse.class);
+
+              //calculate whether it is active or not
+              ZonedDateTime disolvedOnDate = ZonedDateTime.parse(entity.getDissolved_on());
+              ZonedDateTime todaysDateTime = ZonedDateTime.parse(Instant.now().toString());
+              boolean isActive = disolvedOnDate.isAfter(todaysDateTime) ? true: false;
+
+              company = company.builder()
+                      .id(id)
+                      .name(entity.getCompany_name())
+                      .active(isActive)
+                      .active_until(entity.getDissolved_on())
+                      .build();
+          }
+
       }
       else
           return new ResponseEntity<>(HttpStatus.NOT_FOUND);

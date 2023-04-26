@@ -3,7 +3,7 @@ server:
 
 
 external-service:
-  version: v1
+  version: v2
 spring:
     main:
       web-application-type: servlet

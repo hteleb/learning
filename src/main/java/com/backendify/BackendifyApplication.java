@@ -24,7 +24,7 @@ public class BackendifyApplication {
 
 	private static Map<String, String> params = new HashMap<>();
 	@Value("${external-service.version}")
-	private String backendServiceUrl;
+	private String backendServiceVersion;
 
 	@Autowired
 	ServiceMapper serviceMapper;
@@ -64,11 +64,15 @@ public class BackendifyApplication {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody ResponseEntity<Company> getCompanies(@RequestParam("id") String id, @RequestParam("country_iso") String countryIso) throws Exception{
 
-		String baseUrl = params.get(countryIso);
+		if(params.containsKey(countryIso)) {
+			String baseUrl = params.get(countryIso);
 
-		String externalServiceUrl = baseUrl + "/" + backendServiceUrl + "/companies/" + id;
+			String externalServiceUrl = baseUrl + "/" + backendServiceVersion + "/companies/" + id;
 
-		ResponseEntity<Company> company = serviceMapper.getCompanies(externalServiceUrl, id);
-		return company;
+			ResponseEntity<Company> company = serviceMapper.getCompanies(externalServiceUrl, id, backendServiceVersion);
+			return company;
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
 	}
 }

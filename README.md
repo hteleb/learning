@@ -49,6 +49,8 @@ As of now, there are only two backend variants, V1 and V2. Backendify, in compli
 
 Both backends will answer HTTP GET requests on the `/companies/<id>` path, where `id` is the arbitrary string. However, their replies are slightly different:
 
+### Backend Service Running
+
 1. V1 backend will return the JSON object of the following format:
 
 ```json
@@ -61,6 +63,7 @@ Both backends will answer HTTP GET requests on the `/companies/<id>` path, where
 
 2. V1 backend reply will have a Content-Type of an `application/x-company-v1`.
 
+
 3. V2 backend will return the JSON object of the following format:
 ```json
 {
@@ -71,6 +74,30 @@ Both backends will answer HTTP GET requests on the `/companies/<id>` path, where
 ```
 
 4. V2 backend reply will have a different Content-Type of an `application/x-company-v2`.
+
+
+5. In order to run backend service, you can run one of two, service1 or service2. service1 runs on port 9001, service2 runs on port 9002. Both backend services support `/v1/companies/<id>` and `/v2/companies/<id>`
+
+Backend services available at two separate repositories. Each repository is a Spring Boot Application running OpenJDK 11
+
+- In order to clone backend services repositories, you can run one of the following commands according to each service accordingly.
+
+`Backend service1`
+
+git clone https://boring-solomon-wescoff:[PWD]@gitlab.autoiterative.com/group-boring-solomon-wescoff/service1.git
+
+Replace [PWD] with the actual password
+
+`Backend service2`
+
+git clone https://boring-solomon-wescoff:[PWD]@gitlab.autoiterative.com/group-boring-solomon-wescoff/service2.git
+
+Replace [PWD] with the actual password
+
+
+- This backend service only contains 10 companies from id(1 -> 10) any other id not in this list will return 404
+
+
 
 ## Running in Production
 

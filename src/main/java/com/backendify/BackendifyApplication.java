@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 @SpringBootApplication
 @RestController
+@EnableCaching
 
 public class BackendifyApplication {
 

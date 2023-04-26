@@ -3,10 +3,12 @@ package com.backendify;
 import com.backendify.entity.BackendOneResponse;
 import com.backendify.entity.BackendTwoResponse;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -18,8 +20,10 @@ import java.util.Arrays;
 
 
 @Service
+@CacheConfig(cacheNames = { "backendifyCache" })
 public class ServiceMapper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceMapper.class);
     public void saveParameters(String[] parameters) {
 
        for(String param: parameters)
@@ -28,8 +32,8 @@ public class ServiceMapper {
    }
 
 
+   @Cacheable
    public ResponseEntity<Company> getCompanies(String backendUrl, String id, String backendVersion) throws Exception {
-
 
        Company company = null;
 
